@@ -19,4 +19,32 @@ public class Table {
         }
         this.table = array;
     }
+    public boolean CheckParameters(int iindex, int jindex)
+    {
+        if (iindex>=11 || jindex>=11 || iindex<=0 || jindex<=0)
+        {
+            return false;
+        }
+        return true;
+    }
+    public int Search(int iindex, int jindex)
+    {
+        return this.table[iindex][jindex];
+    }
+
+    public void Edit(int iindex, int jindex, int getchar ) throws Exception
+    {
+        int[][] tempTable = this.table;
+        if(CheckParameters(iindex, jindex))
+        {
+            if ((getchar!=1 && getchar!=2 ) && tempTable[iindex][jindex] == 0)
+            {
+                tempTable[iindex][jindex] = getchar;
+            }
+            else
+                {
+                throw new Exception("This field is already taken!");
+            }
+        }
+    }
 }
