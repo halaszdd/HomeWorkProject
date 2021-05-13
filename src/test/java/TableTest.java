@@ -1,3 +1,4 @@
+import model.Table;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -7,17 +8,17 @@ class TableTest {
 
     @Test
     void checkParameters() {
-        assertTrue(table.CheckParameters(7,5));
+        assertTrue(table.checkParameters(7,5));
     }
 
     @Test
      void search() {
-        assertEquals(table.Search(1,1),0);
+        assertEquals(table.search(1,1),0);
     }
 
     @Test
     void edit() {
-        assertThrows(Exception.class, ()->{table.Edit(1,1,2);});
-        assertTrue(table.Search(1,1)==0);
+        assertThrows(Exception.class, ()->{table.edit(1,1,2);});
+        assertTrue(table.search(1,1)==0);
     }
 }
