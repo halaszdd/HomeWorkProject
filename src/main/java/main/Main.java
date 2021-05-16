@@ -1,6 +1,8 @@
 package main;
 
+import fxcontroller.TableApplication;
 import model.Table;
+import javafx.application.Application;
 
 /**
  * The core of the program.
@@ -12,12 +14,13 @@ public class Main {
      */
     public static void main(String[] args) {
 
-        Table table = new Table();
+        /*Table table = new Table();
         for (int i = 0; i < 11; i++) {
             for (int j = 0; j < 11; j++) {
                 System.out.print(table.search(i,j)+ " ");
             }
             System.out.print("\n");
-        }
+        }*/
+        Application.launch(TableApplication.class, args);
     }
 }

@@ -61,7 +61,7 @@ public class Table {
      * @param getchar the number given by a player for painting the given element on the board
      * @throws Exception if the number is not correct (1 or 2), or the chosen field is already taken by another player
      */
-    public void edit(int iindex, int jindex, int getchar ) throws Exception
+    public void edit(int iindex, int jindex, int getchar) throws Exception
     {
         int[][] tempTable = this.table;
         if(checkParameters(iindex, jindex))
@@ -70,8 +70,7 @@ public class Table {
             {
                 tempTable[iindex][jindex] = getchar;
             }
-            else
-                {
+            else {
                 throw new Exception("This field is already taken!");
             }
         }

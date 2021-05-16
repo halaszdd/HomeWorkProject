@@ -8,7 +8,9 @@ class TableTest {
 
     @Test
     void checkParameters() {
+
         assertTrue(table.checkParameters(7,5));
+        assertFalse(table.checkParameters(13,-1));
     }
 
     @Test
@@ -20,5 +22,15 @@ class TableTest {
     void edit() {
         assertThrows(Exception.class, ()->{table.edit(1,1,2);});
         assertTrue(table.search(1,1)==0);
+        try {
+            table.edit(1,1,2);
+            assertEquals(table.search(1,1),2);
+        }catch (Exception E){}
+    }
+
+    @Test
+    void resetTable() {
+        table.resetTable();
+           assertTrue(table.search(3,3)==0);
     }
 }
