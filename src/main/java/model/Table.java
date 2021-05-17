@@ -59,19 +59,14 @@ public class Table {
      * @param iindex a number which gives the serial number of the line where we will write
      * @param jindex a number which gives the serial number of the column where we will write
      * @param getchar the number given by a player for painting the given element on the board
-     * @throws Exception if the number is not correct (1 or 2), or the chosen field is already taken by another player
      */
-    public void edit(int iindex, int jindex, int getchar) throws Exception
+    public void edit(int iindex, int jindex, int getchar)
     {
-        int[][] tempTable = this.table;
         if(checkParameters(iindex, jindex))
         {
-            if ((getchar!=1 && getchar!=2 ) && tempTable[iindex][jindex] == 0)
+            if ((getchar!=1 || getchar!=2 ) && this.table[iindex][jindex] == 0)
             {
-                tempTable[iindex][jindex] = getchar;
-            }
-            else {
-                throw new Exception("This field is already taken!");
+                this.table[iindex][jindex] = getchar;
             }
         }
     }

@@ -19,16 +19,6 @@ class TableTest {
     }
 
     @Test
-    void edit() {
-        assertThrows(Exception.class, ()->{table.edit(1,1,2);});
-        assertTrue(table.search(1,1)==0);
-        try {
-            table.edit(1,1,2);
-            assertEquals(table.search(1,1),2);
-        }catch (Exception E){}
-    }
-
-    @Test
     void resetTable() {
         table.resetTable();
            assertTrue(table.search(3,3)==0);
