@@ -2,6 +2,9 @@ package fxcontroller;
 
         import javafx.beans.binding.ObjectBinding;
         import javafx.fxml.FXML;
+        import javafx.fxml.FXMLLoader;
+        import javafx.scene.Parent;
+        import javafx.scene.Scene;
         import javafx.scene.input.MouseEvent;
         import javafx.scene.layout.GridPane;
         import javafx.scene.layout.StackPane;
@@ -9,6 +12,7 @@ package fxcontroller;
         import javafx.scene.paint.Paint;
         import javafx.scene.shape.Circle;
         import javafx.scene.shape.Rectangle;
+        import javafx.stage.Stage;
         import model.Table;
         import org.w3c.dom.css.Rect;
 
@@ -18,6 +22,10 @@ package fxcontroller;
 public class TableController {
 
     static int numberofclicks=0;
+
+    Table table = new Table();
+
+    static Stage stage = new Stage();
 
     @FXML
     private GridPane tablefx;
@@ -41,6 +49,11 @@ public class TableController {
         return rectangle;
     }
 
+    private static Rectangle changePiece(Color color,StackPane rectangle) {
+        Rectangle rectangle1 = (Rectangle) rectangle.getChildren().get(0);
+        rectangle1.setFill(color);
+        return rectangle1;
+    }
     private static Rectangle createPiece(Color color) {
         var piece = new Rectangle(66,66);
         piece.setFill(color);
@@ -54,8 +67,42 @@ public class TableController {
         var row = GridPane.getRowIndex(rectangle);
         var col = GridPane.getColumnIndex(rectangle);
         //Logger.debug("Click on rectangle {}", position);
-        if(rectangleState(rectangle)) {
-            rectangle.getChildren().add(createPiece(playerTurn(isOdd(numberofclicks))));
+        if(rectangleState(row,col)) {
+                table.edit(row,col,(charType(numberofclicks)));
+                rectangle.getChildren().set(0,changePiece((playerTurn(isOdd(numberofclicks))),rectangle));
+                rectangle.setDisable(true);
+                if(blueWins())
+                {
+                    try{
+                        EndScreenController.theWinnerIs("Blue");
+                        Parent root = FXMLLoader.load(getClass().getResource("/endScreen.fxml"));
+                        stage.setTitle("Result");
+                        Scene scene = new Scene(root);
+                        stage.setScene(scene);
+                        stage.setResizable(false);
+                        EndScreenController.endScreen(stage);
+                        stage.show();
+                    }catch (Exception e){
+                        throw new RuntimeException("File not found!");
+                    }
+
+                }
+                if(redWins())
+                {
+                    try{
+                        EndScreenController.theWinnerIs("Red");
+                        Parent root = FXMLLoader.load(getClass().getResource("/endScreen.fxml"));
+                        stage.setTitle("Result");
+                        Scene scene = new Scene(root);
+                        stage.setScene(scene);
+                        stage.setResizable(false);
+                        EndScreenController.endScreen(stage);
+                        stage.show();
+                    }catch (Exception e){
+                        throw new RuntimeException("File not found!");
+                    }
+                }
+
         }
 
 
@@ -85,11 +132,60 @@ public class TableController {
             return Color.RED;
         }
     }
-    private static boolean rectangleState(StackPane rectangle){
-        Rectangle rectangle1 = (Rectangle) rectangle.getChildren().get(0);
-        if (!rectangle1.getFill().equals(Color.TRANSPARENT)) {
-            return false;
+    private boolean rectangleState(int row, int col){
+        switch (table.search(row,col)) {
+            case 0 -> {return true;}
+            default -> {return false;}
         }
-        return true;
+    }
+    private int charType(int numberofclicks){
+        if(numberofclicks%2==1){
+            return 1;
+        }
+        else{
+            return 2;
+        }
+    }
+
+    private boolean redWins(){
+        int redrectangles=0;
+        for (int i=0;i<11;i++)
+        {
+            if(redrectangles==11)
+            {
+                return true;
+            }
+            redrectangles=0;
+            for (int j=0;j<11;j++)
+            {
+                if(table.search(i,j)==2)
+                {
+                    redrectangles++;
+                }
+            }
+        }
+        return false;
+    }
+    private boolean blueWins(){
+        int bluerectangle=0;
+        for (int i=0;i<11;i++)
+        {
+            if(bluerectangle==11)
+            {
+                return true;
+            }
+            bluerectangle=0;
+            for (int j=0;j<11;j++)
+            {
+                if(table.search(j,i)==1)
+                {
+                    bluerectangle++;
+                }
+            }
+        }
+        return false;
+    }
+    public static void endScreen(Stage getstage){
+        stage=getstage;
     }
 }
