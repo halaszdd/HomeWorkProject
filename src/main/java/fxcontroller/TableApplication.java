@@ -7,6 +7,9 @@ package fxcontroller;
         import javafx.scene.Scene;
         import javafx.stage.Stage;
 
+/**
+ * This class is responsible for creating the window where the game will happen.
+ */
 public class TableApplication extends Application {
 
     @Override

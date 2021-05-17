@@ -1,6 +1,5 @@
 package fxcontroller;
 
-        import javafx.beans.binding.ObjectBinding;
         import javafx.fxml.FXML;
         import javafx.fxml.FXMLLoader;
         import javafx.scene.Parent;
@@ -9,16 +8,14 @@ package fxcontroller;
         import javafx.scene.layout.GridPane;
         import javafx.scene.layout.StackPane;
         import javafx.scene.paint.Color;
-        import javafx.scene.paint.Paint;
-        import javafx.scene.shape.Circle;
         import javafx.scene.shape.Rectangle;
         import javafx.stage.Stage;
         import model.Table;
-        import org.w3c.dom.css.Rect;
+        import org.tinylog.Logger;
 
-        import javax.swing.text.Position;
-        import java.util.logging.Logger;
-
+/**
+ * This class is responsible for handling the fx interface.
+ */
 public class TableController {
 
     static int numberofclicks=0;
@@ -43,7 +40,6 @@ public class TableController {
     private StackPane createRectangle(int i, int j) {
         var rectangle = new StackPane();
         rectangle.getStyleClass().add("rectangle");
-        //var piece = new Rectangle(66,66);
         rectangle.setOnMouseClicked(this::handleMouseClick);
         rectangle = checkColor(i,j,rectangle);
         return rectangle;
@@ -66,15 +62,21 @@ public class TableController {
         numberofclicks++;
         var row = GridPane.getRowIndex(rectangle);
         var col = GridPane.getColumnIndex(rectangle);
-        //Logger.debug("Click on rectangle {}", position);
+        Logger.info("Click on rectangle {}", row,col);
         if(rectangleState(row,col)) {
                 table.edit(row,col,(charType(numberofclicks)));
                 rectangle.getChildren().set(0,changePiece((playerTurn(isOdd(numberofclicks))),rectangle));
                 rectangle.setDisable(true);
                 if(blueWins())
                 {
+                    /*try {
+                        DatabaseController.updateDatabase(1);
+                    }catch (Exception e){
+                        throw new RuntimeException(e.getMessage());
+                    }*/
                     try{
                         EndScreenController.theWinnerIs("Blue");
+                        Logger.info("Blue Wins!");
                         Parent root = FXMLLoader.load(getClass().getResource("/endScreen.fxml"));
                         stage.setTitle("Result");
                         Scene scene = new Scene(root);
@@ -83,14 +85,21 @@ public class TableController {
                         EndScreenController.endScreen(stage);
                         stage.show();
                     }catch (Exception e){
+                        Logger.error(e);
                         throw new RuntimeException("File not found!");
                     }
 
                 }
                 if(redWins())
                 {
+                    /*try {
+                        DatabaseController.updateDatabase(2);
+                    }catch (Exception e){
+                        throw new RuntimeException(e.getMessage());
+                    }*/
                     try{
                         EndScreenController.theWinnerIs("Red");
+                        Logger.info("Red Wins!");
                         Parent root = FXMLLoader.load(getClass().getResource("/endScreen.fxml"));
                         stage.setTitle("Result");
                         Scene scene = new Scene(root);
@@ -99,6 +108,7 @@ public class TableController {
                         EndScreenController.endScreen(stage);
                         stage.show();
                     }catch (Exception e){
+                        Logger.error(e);
                         throw new RuntimeException("File not found!");
                     }
                 }
@@ -185,6 +195,11 @@ public class TableController {
         }
         return false;
     }
+
+    /**
+     * This method's job is to get the stage from the TableApplication class.
+     * @param getstage the variable which trough we get the stage from the OS
+     */
     public static void endScreen(Stage getstage){
         stage=getstage;
     }
